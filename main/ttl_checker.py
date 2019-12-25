@@ -1,7 +1,10 @@
 from .models import Data
 from datetime import datetime, timezone
-
+import time
 from django.utils.timezone import utc
+
+MAX_TIME_OUT = 5.0
+
 
 def get_time_diff(data):
     if data.updated_at:
@@ -10,19 +13,17 @@ def get_time_diff(data):
         return timediff.total_seconds()/60
 
 def background_process():
-    import time
     while True:
-        
         dataset = Data.objects.all()
 
         for data in dataset:
-            if(get_time_diff(data)>=5.0):
+            print(get_time_diff(data))
+            if(get_time_diff(data)>=MAX_TIME_OUT):
                 data.delete()
                 print('Data Deleted')
-        #print(get_time_diff(data))
 
-        time.sleep(3)
-        print('Process Finished')
+        time.sleep(5)
+        print('Background iteration completed')
 
 
 
@@ -31,6 +32,8 @@ def update_ttl(data):
     data.save()
 
 
+def update_all_ttl():
+    Data.objects.all().update(updated_at = datetime.utcnow().replace(tzinfo=utc))
 
 
 

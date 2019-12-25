@@ -21,7 +21,7 @@ urlpatterns = [
     path('',include('main.urls')),
 ]
 
-'''
+
 def task():
     import threading
     from main.ttl_checker import background_process
@@ -29,4 +29,3 @@ def task():
     t.setDaemon(True)
     t.start()
 task()
-'''
