@@ -7,6 +7,8 @@ class Data(models.Model):
     value = models.CharField(max_length = 1000)
     updated_at = models.DateTimeField(auto_now=True)
 
+    objects = models.Manager()
+
     def __str__(self):
         return '{}:{}'.format(self.key, self.value)
     

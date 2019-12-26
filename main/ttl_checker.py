@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 import time
 from django.utils.timezone import utc
 
+
 MAX_TIME_OUT = 5.0
 
 
@@ -19,9 +20,9 @@ def background_process():
         for data in dataset:
             print(get_time_diff(data))
             if(get_time_diff(data)>=MAX_TIME_OUT):
+                print('{} Deleted'.format(data))
                 data.delete()
-                print('Data Deleted')
-
+                
         time.sleep(5)
         print('Background iteration completed')
 
@@ -41,11 +42,11 @@ def update_all_ttl():
 
 ''' Demo Code to run it 
 def task():
-            import threading
-            t = threading.Thread(target=background_process, args=(), kwargs={})
-            t.setDaemon(True)
-            t.start()
-        task()
+    import threading
+    t = threading.Thread(target=background_process, args=(), kwargs={})
+    t.setDaemon(True)
+    t.start()
+task()
 
 
 '''
