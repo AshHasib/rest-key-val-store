@@ -23,4 +23,4 @@ These are the following endpoints:
 
  ## Running the Service
 
- After activating the virtual environment, just run the command ''' ./runservice.sh ''' in the terminal, the service will start right after the migrations.
+ After activating the virtual environment, just run the command ``` ./runservice.sh ``` in the terminal, the service will start right after the migrations.
