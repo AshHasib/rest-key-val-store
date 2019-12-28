@@ -2,13 +2,11 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from .models import Data
 from background_task import background
 import json
 from .ttl_checker import update_ttl, update_all_ttl
-
+from .models import Data
 class DataAPIView(APIView):
-
     def get(self, request):
         raw_query = request.query_params.get('keys')
 
@@ -34,12 +32,11 @@ class DataAPIView(APIView):
 
             counter = 0
             for k,v in json_data.items():
-                #print(k)
-                #print(v)
                 data = Data(key=k, value=v)
                 data.save()
                 counter+=1
             return Response({'num_objects':counter, 'status':status.HTTP_201_CREATED})
+        
         except:
             return Response({'message':'Invalid JSON data'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -52,17 +49,17 @@ class DataAPIView(APIView):
             key_list = list(json_data.keys())
             value_list=list(json_data.values())
             value_list.reverse()
-
+            counter = 0
             for key in key_list:
                 try:
                     data = Data.objects.get(key=key)
                     data.value = json_data[key]
                     update_ttl(data)
-
+                    counter+=1
                 except:
                     pass
             
-            return Response(json_data, status = status.HTTP_200_OK)
+            return Response({'num_updates':counter, 'status':status.HTTP_200_OK})
         except:
             return Response({'message':'Invalid JSON data'}, status=status.HTTP_400_BAD_REQUEST)
 
